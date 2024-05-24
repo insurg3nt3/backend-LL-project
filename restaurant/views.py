@@ -12,8 +12,14 @@ from .models import Menu, Booking
 def index(request):
     return render(request, 'index.html', {})
 
-@permission_classes([IsAuthenticated])
+""" class UserViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = User.objects.all()
+    serializer_class = UserSerializer """
+
+
 class UserViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
 
     def list(self, request):
         queryset = User.objects.all()
@@ -30,7 +36,7 @@ class UserViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 """
     def create(self, request):
-        serializer = UserSerializer(data=request.data, context={'request': request})
+        serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -41,8 +47,8 @@ class UserViewSet(viewsets.ViewSet):
             user = User.objects.get(pk=pk)
         except User.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        
-        serializer = UserSerializer(user, data=request.data, context={'request': request})
+
+        serializer = UserSerializer(user, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -53,7 +59,7 @@ class UserViewSet(viewsets.ViewSet):
             user = User.objects.get(pk=pk)
         except User.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        
+
         serializer = UserSerializer(user, data=request.data, partial=True, context={'request': request})
         if serializer.is_valid():
             serializer.save()
@@ -65,11 +71,12 @@ class UserViewSet(viewsets.ViewSet):
             user = User.objects.get(pk=pk)
         except User.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        
-        user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT) """
 
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+"""
 class MenuItemsView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Menu.objects.all()
     serializer_class = MenuSerializer
 
