@@ -15,3 +15,5 @@ class Booking(models.Model):
     no_of_guests = models.PositiveSmallIntegerField()
     booking_date = models.DateField()
 
+    def get_item(self):
+        return f'{self.name} : {str(self.no_of_guests)} : {str(self.booking_date)}'
